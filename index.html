@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="./style.css">
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+
+    <script src="https://kit.fontawesome.com/2f2c066e30.js" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <div class="navbar">
+        <h2>How'otside</h2>
+        <div class="search-bar">
+            <i class="fa-solid fa-magnifying-glass" id="search-button"></i>
+            <input type="text" id="cityName">
+        </div>
+
+       <div class="navbar-button">
+        <button class="temperatur-toogle"><i class="fa-solid fa-temperature-high"></i></button>
+        <button class="theme-toogle"><i class="fa-solid fa-sun"></i></button>
+       </div>
+
+    </div>
+
+    <div class="main-dashboard">
+        <div class="today-weather">
+            <p id="todayDate">Saturday, 14 February 2026</p>
+            <div class="location">
+                <i class="fa-solid fa-location-dot"></i>
+                <p id="currentCityName">Jakarta</p>
+            </div>
+            <div class="current-tempt">
+                <p id="currentFeels">warm</p>
+                <h3 id="currentTemptValue">24°C</h3>
+                <img src="./img/sun-cloud.png" alt="sun-cloud">
+            </div>
+        </div>
+        <div class="today-highlight">
+            <h2>Today Highlight</h2>
+            <div class="today-highlight-above">
+                <div class="wind-status">
+                    <h5>Wind Status</h5>
+                    <h3 id="windStatus">7.90 <span>km/h</span> </h3>
+                </div>
+                <div class="eye-visibility">
+                    <h5>Visibility</h5>
+                    <h3 id="eyeVisibility">5.50 <span>uv</span> </h3>
+                </div>
+                <div class="sunrise-sunset">
+                    <h5>Sunrise & Sunset</h5>
+                    <div class="detail-sunrise-sunset">
+                        <div class="sunrise">
+                            <h6>sunrise</h6>
+                            <p id="sunriseTime">5.30 am</p>
+                        </div>
+                        <div class="sunset">
+                            <h6>sunset</h6>
+                            <p id="sunsetTime">6.30 pm</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="today-highlight-below">
+                <div class="humidity">
+                    <h5>Humidity</h5>
+                    <h3 id="humidity">84 <span>%</span> </h3>
+                </div>
+                <div class="wind-direction">
+                    <h5>Wind Direction</h5>
+                    <h3 id="windDirection">65 <span></span> </h3>
+                </div>
+                <div class="preasure">
+                    <h5>Preasure</h5>
+                    <h3 id="preasure">1005 <span>hPa</span> </h3>
+                </div>
+            </div>
+        </div>
+        <!-- 
+            <div class="seven-days-forecast">
+                <h5>7 Days Forecast</h5>
+                <div class="days">
+                    <div class="day-temp">
+                        <img src="./img/rain.png" alt="">
+                        <h3>23C</h3>
+                        <p>Rainy</p>
+                    </div>
+                    <div class="day-date">
+                        <p>Monday</p>
+                        <p>15 February 2026</p>
+                    </div>
+                </div>
+                <div class="days">
+                    <div class="day-temp">
+                        <img src="./img/rain.png" alt="">
+                        <h3>23C</h3>
+                        <p>Rainy</p>
+                    </div>
+                    <div class="day-date">
+                        <p>Monday</p>
+                        <p>15 February 2026</p>
+                    </div>
+                </div>
+                <div class="days">
+                    <div class="day-temp">
+                        <img src="./img/rain.png" alt="">
+                        <h3>23C</h3>
+                        <p>Rainy</p>
+                    </div>
+                    <div class="day-date">
+                        <p>Monday</p>
+                        <p>15 February 2026</p>
+                    </div>
+                </div>
+                <div class="days">
+                    <div class="day-temp">
+                        <img src="./img/rain.png" alt="">
+                        <h3>23C</h3>
+                        <p>Rainy</p>
+                    </div>
+                    <div class="day-date">
+                        <p>Monday</p>
+                        <p>15 February 2026</p>
+                    </div>
+                </div>
+            </div>
+         -->
+    </div>
+    
+    <script src="./script.js"></script>
+</body>
+</html>
