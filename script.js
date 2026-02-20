@@ -1,33 +1,41 @@
-const searchCity = document.getElementById("cityName");
-const currentTemptValue = document.getElementById("currentTemptValue");
-const currentCityName = document.getElementById("currentCityName");
-const currentFeels = document.getElementById("currentFeels");
-const windStatus = document.getElementById("windStatus");
-const eyeVisibility = document.getElementById("eyeVisibility");
-const sunriseTime = document.getElementById("sunriseTime");
-const sunsetTime = document.getElementById("sunsetTime");
-const humidity = document.getElementById("humidity");
-const preasure = document.getElementById("preasure");
-const windDirection = document.getElementById("windDirection");
+// === DOM ELEMENTS ===
+const elements = {
+    searchCity: document.getElementById("cityName"),
+    currentTemptValue: document.getElementById("currentTemptValue"),
+    currentCityName: document.getElementById("currentCityName"),
+    currentFeels: document.getElementById("currentFeels"),
+    windStatus: document.getElementById("windStatus"),
+    eyeVisibility: document.getElementById("eyeVisibility"),
+    sunriseTime: document.getElementById("sunriseTime"),
+    sunsetTime: document.getElementById("sunsetTime"),
+    humidity: document.getElementById("humidity"),
+    pressure: document.getElementById("pressure"),
+    windDirection: document.getElementById("windDirection"),
+}
 
-document.getElementById("todayDate").textContent = `${new Date().toLocaleDateString()}`
 
-const APIKey = 'a3c916c3f52e751e38f64aacd03e598a'
+// === CONSTANT ===
+const API_KEY = 'a3c916c3f52e751e38f64aacd03e598a';
+const API_ENDPOINT = {
+    GEOCODING: 'https://geocoding-api.open-meteo.com/v1/search',
+    WEATHER: 'https://api.openweathermap.org/data/2.5/weather'
+}
 
-searchWeather('Jakarta');
+// === UTILITY FUNCTIONS ===
+function formatUnixTime(UnixTimestamp) {
+    const date = new Date(UnixTimestamp * 1000);
+    const hours = date.getHours();
+    const minutes = ("0" + date.getMinutes()).slice(-2);
+    return `${hours}:${minutes}`;
+}
 
-searchCity.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter'){
-        event.preventDefault()
-        const cityName = searchCity.value
-        console.log(cityName)
-        searchWeather(cityName);
-        searchCity.value = '';
-    }
-});
+const formatTemperature = (temp, unit = 'C') => `${Math.round(temp)}°${unit}`;
+const formatWindSpeed = (speed) => `${speed.toFixed(2)} m/s`;
+const formatVisibility = (meters) => `${(meters / 1000). toFixed(1)} km`
 
+// === API FUNCTION ===
 function getCityLocation(cityName) {
-    const cityAPI = `https://geocoding-api.open-meteo.com/v1/search?name=${cityName}&count=1`
+    const cityAPI = `${API_ENDPOINT.GEOCODING}?name=${cityName}&count=1`
 
     return fetch(cityAPI)
         .then(response => response.json())
@@ -49,15 +57,44 @@ function getCityLocation(cityName) {
 };
 
 function getWeatherData (lat, lon) {
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIKey}&units=metric`
+    const weatherUrl = `${API_ENDPOINT.WEATHER}?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`
 
     return fetch(weatherUrl)
     .then(response => response.json())
 }
 
+// === UI FUNCTION === 
+function updateWeatherDisplay(weatherData) {
+    // Current weather 
+    elements.currentCityName.textContent = weatherData.name;
+    elements.currentFeels.textContent = weatherData.weather[0].main;
+    elements.currentTemptValue.textContent = formatTemperature(weatherData.main.temp);
+    
+    // Wind & visibility
+    elements.windStatus.textContent = formatWindSpeed(weatherData.wind.speed);
+    elements.eyeVisibility.textContent = formatVisibility(weatherData.visibility);
+
+    // Sun times
+    elements.sunriseTime.textContent = formatUnixTime(weatherData.sys.sunrise);
+    elements.sunsetTime.textContent = formatUnixTime(weatherData.sys.sunset);
+
+    // Aditional metrics
+    elements.humidity.textContent = `${weatherData.main.humidity}%`;
+    elements.windDirection.textContent = `${weatherData.wind.deg}°`;
+    elements.pressure.textContent = `${weatherData.main.pressure} hPa`
+}
+
+function showLoading() {
+    elements.currentCityName.textContent = 'Loading...';
+    elements.currentTempeValue.textContent = '--°C';
+}
+
+function showError(message) {
+    alert(`Could not find weather data: ${message}`);
+}
+
 function searchWeather (cityName) {
     console.log('Search for:', cityName);
-    
 
     getCityLocation(cityName)
         .then(cityData => {
@@ -67,49 +104,26 @@ function searchWeather (cityName) {
             return getWeatherData(cityData.latitude, cityData.longitude);
         })
         .then(weatherData => {
-
             console.log(weatherData)
-
-            const cityName = weatherData.name;
-            currentCityName.textContent = `${cityName}`;
-
-            const feelsLike = weatherData.weather[0].main;
-            currentFeels.textContent = `${feelsLike}`;
-
-            const temp = weatherData.main.temp;
-            currentTemptValue.textContent = `${temp}°C`;
-
-            const currentWind = weatherData.wind.speed;
-            windStatus.textContent = `${currentWind} meter/sec`
-
-            const visible = weatherData.visibility;
-            eyeVisibility.textContent = `${visible} meter`
-
-            const sunriseDay = weatherData.sys.sunrise;
-            var date = new Date(sunriseDay * 1000);
-            var sunriseHours = date.getHours();
-            var sunriseMinutes = "0" + date.getMinutes();
-            var sunriseActualTime = `${sunriseHours}:${sunriseMinutes.substr(-2)}`
-            sunriseTime.textContent = `${sunriseActualTime}`
-
-            const sunsetDay = weatherData.sys.sunset;
-            var date = new Date(sunsetDay * 1000);
-            var sunsetHours = date.getHours();
-            var sunsetMinutes = "0" + date.getMinutes();
-            var sunsetActualTime = `${sunsetHours}:${sunsetMinutes.substr(-2)}`
-            sunsetTime.textContent = `${sunsetActualTime}`;
-
-            const currentHumidity = weatherData.main.humidity;
-            humidity.textContent = `${currentHumidity} %`;
-
-            const currentWindDirect = weatherData.wind.deg;
-            windDirection.textContent = `${currentWindDirect}°`
-
-            const currentPreasure = weatherData.main.pressure;
-            preasure.textContent = `${currentPreasure} hPa`;
+            updateWeatherDisplay(weatherData)
         })
         .catch(error => {
-            console.error('Error:', error.message)
+            console.error('Error:', error.message);
+            showError(error.message)
         })
 }
 
+// === EVENT HANDLERS ===
+elements.searchCity.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter'){
+        event.preventDefault()
+        const cityName = elements.searchCity.value
+        console.log(cityName)
+        searchWeather(cityName);
+        searchCity.value = '';
+    }
+});
+
+
+document.getElementById("todayDate").textContent = `${new Date().toLocaleDateString()}`
+searchWeather('Jakarta');

@@ -152,7 +152,7 @@ h2 {
     gap: .5rem;
 }
 
-.wind-status, .eye-visibility, .sunrise-sunset, .humidity, .wind-direction, .preasure{
+.wind-status, .eye-visibility, .sunrise-sunset, .humidity, .wind-direction, .pressure{
     width: 100%;
     padding: 1rem;
     border-radius: 1.25rem;
